@@ -1,1266 +1,891 @@
-# SQL Practice: Beginner to Advanced
-
-A structured, hands-on SQL learning repository covering fundamental queries, relational database concepts, intermediate data analysis, advanced SQL programming, performance tuning, and real-world projects.
-
-The goal is to progress from writing your first `SELECT` query to designing reliable, optimized SQL solutions for business applications and reporting systems.
-
-> **Primary database:** Microsoft SQL Server (T-SQL)  
-> **Also transferable to:** PostgreSQL, MySQL, Oracle (syntax varies by database)  
-> **Level:** Beginner → Intermediate → Advanced
+# Complete SQL Roadmap for a Professional Data Analyst
+**Focus:** Microsoft SQL Server / T-SQL  
+**Goal:** Progress from beginner SQL to job-ready data analysis, reporting, and database-query skills.  
+**Recommended stack:** SQL Server + SSMS, Excel, Power BI, Python (pandas), and Git.
 
 ---
 
-## Table of Contents
+## How to Use This Roadmap
 
-- [Learning Objectives](#learning-objectives)
-- [Prerequisites and Setup](#prerequisites-and-setup)
-- [Repository Structure](#repository-structure)
-- [Learning Roadmap](#learning-roadmap)
-  - [Phase 1: SQL Fundamentals](#phase-1-sql-fundamentals)
-  - [Phase 2: Filtering, Sorting, and Built-in Functions](#phase-2-filtering-sorting-and-built-in-functions)
-  - [Phase 3: Data Manipulation and Table Design](#phase-3-data-manipulation-and-table-design)
-  - [Phase 4: Joins and Set Operators](#phase-4-joins-and-set-operators)
-  - [Phase 5: Aggregation and Reporting](#phase-5-aggregation-and-reporting)
-  - [Phase 6: Subqueries and CTEs](#phase-6-subqueries-and-ctes)
-  - [Phase 7: Intermediate Query Patterns](#phase-7-intermediate-query-patterns)
-  - [Phase 8: Advanced SQL and Window Functions](#phase-8-advanced-sql-and-window-functions)
-  - [Phase 9: Views, Procedures, Functions, and Triggers](#phase-9-views-procedures-functions-and-triggers)
-  - [Phase 10: Transactions and Concurrency](#phase-10-transactions-and-concurrency)
-  - [Phase 11: Database Design and Constraints](#phase-11-database-design-and-constraints)
-  - [Phase 12: Indexing and Query Optimization](#phase-12-indexing-and-query-optimization)
-  - [Phase 13: Security and Production Practices](#phase-13-security-and-production-practices)
-- [SQL Query Execution Order](#sql-query-execution-order)
-- [Practice Database Ideas](#practice-database-ideas)
-- [Real-World Projects](#real-world-projects)
-- [Practice Method](#practice-method)
-- [Progress Tracker](#progress-tracker)
-- [Common SQL Mistakes](#common-sql-mistakes)
-- [Recommended Learning Resources](#recommended-learning-resources)
-- [Contribution Guidelines](#contribution-guidelines)
-- [License](#license)
+1. Create a folder for each numbered phase in the suggested structure below.
+2. Study topics in order. Do not skip the fundamentals or join practice.
+3. For each topic:
+   - Read the concept.
+   - Write and run at least 3–5 queries.
+   - Save your work in a `.sql` file.
+   - Add comments explaining what the query does.
+   - Test normal, missing, duplicate, and boundary cases where applicable.
+4. Use a practice database such as Microsoft AdventureWorks or a small database you create yourself.
+5. Build business-focused projects, not just isolated query exercises.
+6. Review incorrect queries and rewrite them without looking at your previous solution.
+7. Track progress using the checklist at the end.
+
+**Suggested weekly effort:** 8–12 focused hours. If you have less time, extend the schedule rather than rushing through core skills.
 
 ---
 
-## Learning Objectives
-
-By completing this repository, you should be able to:
-
-- Write readable and accurate SQL queries.
-- Create and modify tables and manage relational data.
-- Filter, sort, group, and aggregate records.
-- Combine data from multiple tables using joins and set operators.
-- Solve business problems using subqueries, CTEs, and window functions.
-- Build reusable views, stored procedures, and functions.
-- Use transactions and error handling safely.
-- Design normalized tables with appropriate keys and constraints.
-- Analyze execution plans and improve query performance.
-- Apply permissions and safe database practices.
-- Build reporting and analytics solutions using realistic datasets.
-
----
-
-## Prerequisites and Setup
-
-### Recommended environment
-
-For the main T-SQL practice path, install:
-
-1. **SQL Server Developer edition** for local learning, or use an authorized SQL Server instance.
-2. **SQL Server Management Studio (SSMS)** or **Visual Studio Code** with the SQL Server extension.
-3. A sample database such as **AdventureWorks** or a small custom practice database.
-
-Use a local, disposable practice database for exercises involving `UPDATE`, `DELETE`, stored procedures, and schema changes. Never experiment with destructive statements on a production database.
-
-### First query
-
-```sql
-SELECT
-    'Hello, SQL!' AS message,
-    GETDATE() AS current_datetime;
-```
-
-> `GETDATE()` is specific to SQL Server. Other database systems provide different date/time functions.
-
-### Create a practice database
-
-```sql
-CREATE DATABASE SQLPractice;
-GO
-
-USE SQLPractice;
-GO
-```
-
-`GO` is a client-side batch separator supported by tools such as SSMS; it is not a Transact-SQL statement sent to the database engine.
-
----
-
-## Repository Structure
-
-A suggested folder layout:
-
-```text
-sql-practice/
-├── README.md
-├── 00_setup/
-│   ├── create_database.sql
-│   └── sample_data.sql
-├── 01_beginner/
-│   ├── 01_select.sql
-│   ├── 02_where_order_by.sql
-│   ├── 03_operators.sql
-│   ├── 04_nulls.sql
-│   ├── 05_string_functions.sql
-│   ├── 06_numeric_functions.sql
-│   └── 07_date_functions.sql
-├── 02_data_manipulation/
-│   ├── 01_create_alter_drop.sql
-│   ├── 02_insert.sql
-│   ├── 03_update.sql
-│   ├── 04_delete.sql
-│   └── 05_constraints.sql
-├── 03_intermediate/
-│   ├── 01_joins.sql
-│   ├── 02_aggregates.sql
-│   ├── 03_case_expressions.sql
-│   ├── 04_subqueries.sql
-│   ├── 05_ctes.sql
-│   └── 06_set_operators.sql
-├── 04_advanced/
-│   ├── 01_window_functions.sql
-│   ├── 02_recursive_ctes.sql
-│   ├── 03_views.sql
-│   ├── 04_stored_procedures.sql
-│   ├── 05_functions.sql
-│   ├── 06_triggers.sql
-│   ├── 07_transactions.sql
-│   └── 08_error_handling.sql
-├── 05_performance/
-│   ├── 01_indexes.sql
-│   ├── 02_execution_plans.sql
-│   └── 03_query_tuning.sql
-├── 06_projects/
-│   ├── 01_sales_analysis.sql
-│   ├── 02_inventory_management.sql
-│   ├── 03_hr_analytics.sql
-│   └── 04_export_invoice_reporting.sql
-└── 07_interview_questions/
-    ├── beginner.sql
-    ├── intermediate.sql
-    └── advanced.sql
-```
-
-This is a suggested structure. Create folders and files as you work through each topic.
-
----
-
-# Learning Roadmap
-
-## Phase 1: SQL Fundamentals
-
-**Goal:** Retrieve data and understand tables.
-
-### Topics
-
-- What SQL is and how relational databases work
-- Database, schema, table, row, and column
-- Data types: `INT`, `BIGINT`, `DECIMAL`, `VARCHAR`, `NVARCHAR`, `DATE`, `DATETIME2`, `BIT`
-- `SELECT`
-- Selecting individual columns and all columns
-- Column aliases with `AS`
-- `DISTINCT`
-- `TOP`
-- `ORDER BY`
-- `ASC` and `DESC`
-- `WHERE`
-- Comparison operators: `=`, `<>`, `!=`, `<`, `>`, `<=`, `>=`
-- Logical operators: `AND`, `OR`, `NOT`
-- `IN`, `BETWEEN`, `LIKE`
-- Wildcards in `LIKE`
-- `IS NULL` and `IS NOT NULL`
-- Operator precedence and parentheses
-
-### Practice
-
-```sql
--- Select specific columns
-SELECT EmployeeID, EmployeeName, Department
-FROM Employees;
-
--- Return unique departments
-SELECT DISTINCT Department
-FROM Employees;
-
--- Filter and sort
-SELECT EmployeeID, EmployeeName, Salary
-FROM Employees
-WHERE Salary >= 30000
-ORDER BY Salary DESC;
-
--- Match a list of departments
-SELECT EmployeeID, EmployeeName, Department
-FROM Employees
-WHERE Department IN ('IT', 'Finance', 'HR');
-
--- Find names beginning with A
-SELECT EmployeeID, EmployeeName
-FROM Employees
-WHERE EmployeeName LIKE 'A%';
-
--- Find rows where a value is missing
-SELECT EmployeeID, EmployeeName
-FROM Employees
-WHERE ManagerID IS NULL;
-```
-
-### Exercises
-
-- Return the five highest-paid employees.
-- Find employees hired after a given date.
-- List unique job titles.
-- Find names containing a specific substring.
-- Identify rows with missing values in a selected column.
-
----
-
-## Phase 2: Filtering, Sorting, and Built-in Functions
-
-**Goal:** Transform values and write flexible filters.
-
-### Topics
-
-- `CASE` expressions
-- `COALESCE`, `ISNULL`, and `NULLIF`
-- String functions: `CONCAT`, `LEN`, `LEFT`, `RIGHT`, `SUBSTRING`, `UPPER`, `LOWER`, `TRIM`, `REPLACE`, `CHARINDEX`
-- Numeric functions: `ROUND`, `ABS`, `CEILING`, `FLOOR`
-- Date/time functions: `GETDATE`, `SYSDATETIME`, `DATEADD`, `DATEDIFF`, `DATEPART`, `DATENAME`, `EOMONTH`, `YEAR`, `MONTH`, `DAY`
-- Type conversion: `CAST`, `CONVERT`, `TRY_CAST`, `TRY_CONVERT`
-- Conditional logic with `CASE WHEN`
-- Handling missing values
-- Sorting by calculated expressions
-- Pattern matching and data cleaning
-- Safe date filtering and date-range boundaries
-
-### Practice
-
-```sql
--- Categorize salary
-SELECT
-    EmployeeID,
-    EmployeeName,
-    Salary,
-    CASE
-        WHEN Salary >= 80000 THEN 'High'
-        WHEN Salary >= 40000 THEN 'Medium'
-        ELSE 'Entry'
-    END AS SalaryCategory
-FROM Employees;
-
--- Clean leading and trailing spaces
-SELECT TRIM(EmployeeName) AS CleanEmployeeName
-FROM Employees;
-
--- Replace a missing commission with zero
-SELECT
-    EmployeeID,
-    COALESCE(Commission, 0) AS Commission
-FROM Employees;
-
--- Find employees hired during 2026
-SELECT EmployeeID, EmployeeName, HireDate
-FROM Employees
-WHERE HireDate >= '20260101'
-  AND HireDate <  '20270101';
-
--- Add 30 days to a date
-SELECT DATEADD(DAY, 30, CAST('20261001' AS DATE)) AS FutureDate;
-```
-
-### Exercises
-
-- Standardize text values and remove extra spaces.
-- Classify employees into salary bands.
-- Calculate employee tenure.
-- Extract year and month from a date.
-- Find records with invalid date or numeric text using `TRY_CONVERT`.
-
----
-
-## Phase 3: Data Manipulation and Table Design
-
-**Goal:** Create tables and modify data safely.
-
-### Topics
-
-- DDL: `CREATE`, `ALTER`, `DROP`, `TRUNCATE`
-- DML: `INSERT`, `UPDATE`, `DELETE`
-- `INSERT INTO ... SELECT`
-- `SELECT INTO`
-- `IDENTITY`
-- Primary keys and foreign keys
-- `NOT NULL`, `UNIQUE`, `CHECK`, `DEFAULT`
-- Adding and removing constraints
-- Temporary tables: `#TempTable`, `##GlobalTempTable`
-- Table variables
-- Basic data import and export
-- Data type selection
-- Referential integrity
-- Safe update/delete patterns
-
-### Practice
-
-```sql
-CREATE TABLE Departments (
-    DepartmentID INT IDENTITY(1,1) PRIMARY KEY,
-    DepartmentName NVARCHAR(100) NOT NULL UNIQUE
-);
-
-CREATE TABLE Employees (
-    EmployeeID INT IDENTITY(1,1) PRIMARY KEY,
-    EmployeeName NVARCHAR(150) NOT NULL,
-    DepartmentID INT NULL,
-    Salary DECIMAL(12,2) NOT NULL
-        CHECK (Salary >= 0),
-    HireDate DATE NOT NULL
-        DEFAULT (CONVERT(DATE, GETDATE())),
-    CONSTRAINT FK_Employees_Departments
-        FOREIGN KEY (DepartmentID)
-        REFERENCES Departments(DepartmentID)
-);
-
-INSERT INTO Departments (DepartmentName)
-VALUES ('IT'), ('Finance'), ('HR');
-
-INSERT INTO Employees
-    (EmployeeName, DepartmentID, Salary, HireDate)
-VALUES
-    ('Amina Rahman', 1, 55000, '20240115'),
-    ('Karim Hasan', 2, 48000, '20230610'),
-    ('Nadia Islam', 1, 62000, '20220520');
-
--- Always inspect the target rows before changing them.
-SELECT *
-FROM Employees
-WHERE EmployeeID = 1;
-
-UPDATE Employees
-SET Salary = 57000
-WHERE EmployeeID = 1;
-
-DELETE FROM Employees
-WHERE EmployeeID = 3;
-```
-
-### Important safety rule
-
-Never run an `UPDATE` or `DELETE` without verifying the target rows and the `WHERE` condition. For important changes, use a transaction and confirm the affected row count.
-
----
-
-## Phase 4: Joins and Set Operators
-
-**Goal:** Combine related data from multiple tables.
-
-### Topics
-
-- `INNER JOIN`
-- `LEFT JOIN` / `LEFT OUTER JOIN`
-- `RIGHT JOIN` / `RIGHT OUTER JOIN`
-- `FULL OUTER JOIN`
-- `CROSS JOIN`
-- Self joins
-- Joining three or more tables
-- Composite join conditions
-- One-to-one, one-to-many, and many-to-many relationships
-- `UNION` and `UNION ALL`
-- `INTERSECT`
-- `EXCEPT`
-- Anti-joins with `NOT EXISTS` or `LEFT JOIN ... IS NULL`
-- Identifying duplicate rows after joins
-- Join cardinality and row multiplication
-
-### Practice
-
-```sql
--- Employees with their department names
-SELECT
-    e.EmployeeID,
-    e.EmployeeName,
-    d.DepartmentName
-FROM Employees AS e
-LEFT JOIN Departments AS d
-    ON e.DepartmentID = d.DepartmentID;
-
--- Employees without a matching department
-SELECT e.EmployeeID, e.EmployeeName
-FROM Employees AS e
-LEFT JOIN Departments AS d
-    ON e.DepartmentID = d.DepartmentID
-WHERE d.DepartmentID IS NULL;
-
--- Combine two compatible result sets
-SELECT EmployeeName AS PersonName
-FROM CurrentEmployees
-UNION ALL
-SELECT EmployeeName
-FROM FormerEmployees;
-```
-
-### Exercises
-
-- Find departments with no employees.
-- List employees with their manager names using a self join.
-- Find customers who have never placed an order.
-- Compare two datasets and return records found in one but not the other.
-- Investigate why a join unexpectedly increases the row count.
-
----
-
-## Phase 5: Aggregation and Reporting
-
-**Goal:** Summarize records for business reports.
-
-### Topics
-
-- Aggregate functions: `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`
-- `GROUP BY`
-- `HAVING`
-- Conditional aggregation
-- `COUNT(*)` versus `COUNT(column)`
-- `COUNT(DISTINCT column)`
-- Grouping by multiple columns
-- Aggregating by month, year, department, customer, or product
-- Ratios, percentages, and averages
-- `ROLLUP`, `CUBE`, and `GROUPING SETS`
-- Pivoting and unpivoting with `PIVOT` and `UNPIVOT`
-- Report totals and subtotals
-
-### Practice
-
-```sql
--- Department salary summary
-SELECT
-    d.DepartmentName,
-    COUNT(e.EmployeeID) AS EmployeeCount,
-    AVG(e.Salary) AS AverageSalary,
-    SUM(e.Salary) AS TotalSalary
-FROM Departments AS d
-LEFT JOIN Employees AS e
-    ON d.DepartmentID = e.DepartmentID
-GROUP BY d.DepartmentName
-ORDER BY TotalSalary DESC;
-
--- Departments with at least five employees
-SELECT DepartmentID, COUNT(*) AS EmployeeCount
-FROM Employees
-GROUP BY DepartmentID
-HAVING COUNT(*) >= 5;
-
--- Conditional aggregation
-SELECT
-    DepartmentID,
-    COUNT(*) AS TotalEmployees,
-    SUM(CASE WHEN Salary >= 50000 THEN 1 ELSE 0 END) AS EmployeesAtOrAbove50000
-FROM Employees
-GROUP BY DepartmentID;
-```
-
-### Exercises
-
-- Calculate monthly sales and year-to-date totals.
-- Find the top five products by revenue.
-- Calculate each department's share of total salary.
-- Produce a report with subtotals by department and job title.
-- Count records by status, including pending and completed items.
-
----
-
-## Phase 6: Subqueries and CTEs
-
-**Goal:** Solve multi-step query problems clearly.
-
-### Topics
-
-- Scalar subqueries
-- Single-row and multi-row subqueries
-- Correlated subqueries
-- Subqueries in `SELECT`, `FROM`, and `WHERE`
-- `EXISTS` and `NOT EXISTS`
-- `IN` and `NOT IN`, including NULL-related behavior
-- Common Table Expressions (CTEs)
-- Multiple CTEs
-- Recursive CTEs
-- Derived tables
-- `APPLY`, `CROSS APPLY`, and `OUTER APPLY` in SQL Server
-- Choosing between joins, subqueries, and CTEs
-
-### Practice
-
-```sql
--- Employees earning above the overall average
-SELECT EmployeeID, EmployeeName, Salary
-FROM Employees
-WHERE Salary > (
-    SELECT AVG(Salary)
-    FROM Employees
-);
-
--- Departments with at least one employee
-SELECT d.DepartmentID, d.DepartmentName
-FROM Departments AS d
-WHERE EXISTS (
-    SELECT 1
-    FROM Employees AS e
-    WHERE e.DepartmentID = d.DepartmentID
-);
-
--- A CTE for department salary totals
-WITH DepartmentSalary AS (
-    SELECT DepartmentID, SUM(Salary) AS TotalSalary
-    FROM Employees
-    GROUP BY DepartmentID
-)
-SELECT DepartmentID, TotalSalary
-FROM DepartmentSalary
-WHERE TotalSalary > 100000;
-```
-
-### Exercises
-
-- Find employees earning more than their department's average salary.
-- Find the latest order for each customer.
-- Identify customers who placed orders in every month of a period.
-- Use a recursive CTE to represent an employee-manager hierarchy.
-- Rewrite a query using both a join and a subquery, then compare clarity and performance.
-
----
-
-## Phase 7: Intermediate Query Patterns
-
-**Goal:** Handle common data-cleaning and business logic problems.
-
-### Topics
-
-- Duplicate detection with `GROUP BY` and `HAVING`
-- Duplicate removal using `ROW_NUMBER()` and a controlled delete
-- Missing and unmatched records
-- Gaps and islands
-- Consecutive dates and streaks
-- Latest row per group
-- First and last transaction per customer
-- Top N records per category
-- Conditional updates
-- Upsert concepts and SQL Server `MERGE` considerations
-- `OUTPUT` clause
-- `CROSS APPLY` and `OUTER APPLY`
-- Data quality checks
-- Reconciliation between source and target datasets
-- Dynamic filters and optional parameters
-- Pagination with `OFFSET ... FETCH`
-- Idempotent data-processing patterns
-
-### Practice: Find duplicate values
-
-```sql
-SELECT Email, COUNT(*) AS DuplicateCount
-FROM Customers
-GROUP BY Email
-HAVING COUNT(*) > 1;
-```
-
-### Practice: Latest record per customer
-
-```sql
-WITH RankedOrders AS (
-    SELECT
-        OrderID,
-        CustomerID,
-        OrderDate,
-        ROW_NUMBER() OVER (
-            PARTITION BY CustomerID
-            ORDER BY OrderDate DESC, OrderID DESC
-        ) AS rn
-    FROM Orders
-)
-SELECT OrderID, CustomerID, OrderDate
-FROM RankedOrders
-WHERE rn = 1;
-```
-
-### Exercises
-
-- Find duplicate invoice numbers and decide which records need review.
-- Find the latest status for every order.
-- Compare two tables to identify missing or changed records.
-- Find date gaps in a sequence of daily transactions.
-- Return page 3 of a sorted result set.
-
----
-
-## Phase 8: Advanced SQL and Window Functions
-
-**Goal:** Perform advanced analytics without collapsing rows into groups.
-
-### Window function topics
-
-- `OVER`
-- `PARTITION BY`
-- `ORDER BY` inside `OVER`
-- Window frames: `ROWS BETWEEN ...`
-- `ROW_NUMBER`
-- `RANK`
-- `DENSE_RANK`
-- `NTILE`
-- `LAG`
-- `LEAD`
-- `FIRST_VALUE`
-- `LAST_VALUE`
-- Running totals
-- Moving averages
-- Percentages of total
-- Period-over-period comparisons
-- Ranking within categories
-- Window aggregates and frame boundaries
-
-### Other advanced topics
-
-- Recursive CTE patterns
-- Advanced `CASE` logic
-- `PIVOT` and `UNPIVOT`
-- JSON support in SQL Server
-- XML basics where relevant
-- Dynamic SQL and `sp_executesql`
-- Table-valued parameters
-- Temporary objects and query scope
-- Set-based processing versus cursors
-- Query design for large datasets
-
-### Practice: Rank employees by salary within each department
-
-```sql
-SELECT
-    EmployeeID,
-    EmployeeName,
-    DepartmentID,
-    Salary,
-    DENSE_RANK() OVER (
-        PARTITION BY DepartmentID
-        ORDER BY Salary DESC
-    ) AS SalaryRank
-FROM Employees;
-```
-
-### Practice: Running total of sales
-
-```sql
-SELECT
-    OrderDate,
-    OrderID,
-    TotalAmount,
-    SUM(TotalAmount) OVER (
-        ORDER BY OrderDate, OrderID
-        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-    ) AS RunningTotal
-FROM Orders;
-```
-
-### Practice: Compare a value with the previous row
-
-```sql
-SELECT
-    ProductID,
-    SnapshotDate,
-    StockQuantity,
-    LAG(StockQuantity) OVER (
-        PARTITION BY ProductID
-        ORDER BY SnapshotDate
-    ) AS PreviousStockQuantity
-FROM InventorySnapshots;
-```
-
-### Exercises
-
-- Return the top three salaries in each department.
-- Calculate a rolling seven-day sales total.
-- Compare current-month sales with the previous month.
-- Identify products whose stock decreased between snapshots.
-- Calculate each customer's percentage contribution to revenue.
-
----
-
-## Phase 9: Views, Procedures, Functions, and Triggers
-
-**Goal:** Create reusable database objects and encapsulate business logic.
-
-### Views
-
-- `CREATE VIEW`
-- `ALTER VIEW` and `CREATE OR ALTER VIEW`
-- Views for reporting
-- View limitations and updateability
-- Schema binding
-- Indexed views and their restrictions
-
-```sql
-CREATE OR ALTER VIEW dbo.vw_EmployeeDepartment
-AS
-SELECT
-    e.EmployeeID,
-    e.EmployeeName,
-    d.DepartmentName,
-    e.Salary
-FROM dbo.Employees AS e
-LEFT JOIN dbo.Departments AS d
-    ON e.DepartmentID = d.DepartmentID;
-GO
-```
-
-### Stored procedures
-
-- `CREATE PROCEDURE`
-- Input and output parameters
-- Default parameter values
-- `EXEC` / `EXECUTE`
-- Return codes
-- Parameter validation
-- `SET NOCOUNT ON`
-- `TRY...CATCH`
-- Transaction handling
-- Dynamic SQL with `sp_executesql`
-- Altering and dropping stored procedures
-- Permissions and execution context
-
-```sql
-CREATE OR ALTER PROCEDURE dbo.GetEmployeesByDepartment
-    @DepartmentID INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT EmployeeID, EmployeeName, Salary
-    FROM dbo.Employees
-    WHERE DepartmentID = @DepartmentID
-    ORDER BY EmployeeName;
-END;
-GO
-
-EXEC dbo.GetEmployeesByDepartment @DepartmentID = 1;
-```
-
-### Functions
-
-- Scalar user-defined functions
-- Inline table-valued functions
-- Multi-statement table-valued functions
-- Parameters and return values
-- Determinism and performance considerations
-- When a view or stored procedure is more suitable
-
-### Triggers
-
-- `AFTER` triggers
-- `INSTEAD OF` triggers
-- `INSERTED` and `DELETED` pseudo-tables
-- Multi-row-safe trigger design
-- Audit logging
-- Trigger recursion and side effects
-- When not to use triggers
-
-### Other database objects
-
-- Schemas
-- Synonyms
-- Sequences
-- Constraints
-- SQL Server Agent jobs (where available)
-- User-defined table types
-
-### Exercises
-
-- Create a procedure that returns pending invoices by date range.
-- Add validation for invalid date ranges.
-- Create a view that summarizes monthly sales.
-- Write a multi-row-safe audit trigger.
-- Compare a view, inline table-valued function, and stored procedure for a reporting requirement.
-
----
-
-## Phase 10: Transactions and Concurrency
-
-**Goal:** Protect data integrity during multi-step operations.
-
-### Topics
-
-- ACID properties
-- `BEGIN TRANSACTION`
-- `COMMIT`
-- `ROLLBACK`
-- `SAVE TRANSACTION`
-- `TRY...CATCH`
-- `XACT_STATE()`
-- `@@TRANCOUNT`
-- `SET XACT_ABORT ON`
-- Isolation levels:
-  - `READ UNCOMMITTED`
-  - `READ COMMITTED`
-  - `REPEATABLE READ`
-  - `SNAPSHOT`
-  - `SERIALIZABLE`
-- Locking and blocking
-- Deadlocks and deadlock graphs
-- Optimistic versus pessimistic concurrency
-- Lost updates and dirty reads
-- Transaction scope and duration
-
-### Practice
-
-```sql
-SET XACT_ABORT ON;
-
-BEGIN TRY
-    BEGIN TRANSACTION;
-
-    UPDATE dbo.Employees
-    SET Salary = Salary + 1000
-    WHERE EmployeeID = 1;
-
-    -- Verify the result before committing.
-    SELECT EmployeeID, EmployeeName, Salary
-    FROM dbo.Employees
-    WHERE EmployeeID = 1;
-
-    COMMIT TRANSACTION;
-END TRY
-BEGIN CATCH
-    IF XACT_STATE() <> 0
-        ROLLBACK TRANSACTION;
-
-    THROW;
-END CATCH;
-```
-
-Practice transaction examples in a test database. Understand the effects before applying them to real data.
-
----
-
-## Phase 11: Database Design and Constraints
-
-**Goal:** Build consistent and maintainable relational models.
-
-### Topics
-
-- Entities, attributes, and relationships
-- Primary and foreign keys
-- Candidate and composite keys
-- Natural keys versus surrogate keys
-- One-to-one, one-to-many, and many-to-many relationships
-- Junction tables
-- Referential integrity
-- Normalization: 1NF, 2NF, 3NF, and BCNF concepts
-- Functional dependencies
-- Denormalization and trade-offs
-- Choosing data types and lengths
-- Handling NULLs correctly
-- Unique constraints and check constraints
-- Naming conventions
-- ER diagrams
-- OLTP versus OLAP
-- Fact and dimension tables
-- Star and snowflake schemas
-- Slowly changing dimensions (overview)
-
-### Practice
-
-Design a small sales system containing:
-
-- `Customers`
-- `Products`
-- `Orders`
-- `OrderDetails`
-- `Payments`
-
-Define primary keys, foreign keys, appropriate data types, uniqueness rules, and validation constraints. Explain why each relationship exists.
-
----
-
-## Phase 12: Indexing and Query Optimization
-
-**Goal:** Understand why queries are slow and how to improve them.
-
-### Topics
-
-- Clustered and nonclustered indexes
-- Composite indexes and column order
-- Included columns
-- Unique indexes
-- Filtered indexes
-- Index selectivity
-- Index seeks versus scans
-- Execution plans: estimated and actual
-- Query cost estimates and their limitations
-- Statistics and cardinality estimation
-- SARGable predicates
-- Implicit conversions
-- Avoiding unnecessary `SELECT *`
-- Avoiding functions on filtered columns when they prevent efficient index access
-- Join and aggregation performance
-- Appropriate data types
-- Key lookups
-- Sort and spill warnings
-- Parameter sniffing and plan reuse
-- Query Store
-- Missing-index suggestions and their limitations
-- Index fragmentation and maintenance trade-offs
-- Measuring before and after changes
-
-### Practice: Create an index
-
-```sql
-CREATE NONCLUSTERED INDEX IX_Employees_DepartmentID
-ON dbo.Employees (DepartmentID)
-INCLUDE (EmployeeName, Salary);
-```
-
-Do not create indexes indiscriminately. Indexes use storage and can slow down inserts, updates, and deletes. Measure the workload and inspect execution plans.
-
-### Practice: Use a SARGable date range
-
-```sql
--- Usually preferable to applying YEAR() to every row:
-SELECT OrderID, OrderDate
-FROM dbo.Orders
-WHERE OrderDate >= '20260101'
-  AND OrderDate <  '20270101';
-```
-
-### Performance checklist
-
-- Does the query return only the columns needed?
-- Are filters selective and data types compatible?
-- Are joins based on correct keys?
-- Are duplicates caused by one-to-many joins?
-- Does the actual execution plan show expensive scans, sorts, spills, or lookups?
-- Are indexes aligned with the real workload?
-- Have duration, reads, and row counts been measured before and after changes?
-- Is the result still correct after optimization?
-
----
-
-## Phase 13: Security and Production Practices
-
-**Goal:** Write SQL that is safer to operate and maintain.
-
-### Topics
-
-- Least-privilege access
-- Database roles and permissions
-- `GRANT`, `DENY`, and `REVOKE`
-- SQL injection
-- Parameterized queries
-- Dynamic SQL safety
-- Avoiding string concatenation for user-supplied values
-- Sensitive data handling
-- Auditing and change tracking
-- Backup and restore concepts
-- Development, testing, and production environments
-- Deployment scripts and rollback planning
-- Naming conventions and formatting
-- Documentation and comments
-- Error handling and meaningful messages
-- Idempotent scripts
-- Version control for SQL scripts
-- Testing edge cases and NULL values
-
-### Security rules
-
-- Use parameterized queries in application code.
-- Prefer `sp_executesql` with parameters when dynamic SQL is necessary.
-- Grant only the permissions required for the task.
-- Do not expose passwords, connection strings, or sensitive production data in a repository.
-- Test destructive operations on disposable data first.
-- Use an explicit transaction and a reviewed rollback plan for high-impact changes.
-- A read-only reporting assistant should be restricted by database permissions as well as application-side validation; a text check alone is not a complete security boundary.
-
----
-
-## SQL Query Execution Order
-
-A simplified logical processing order for a typical `SELECT` query is:
-
-1. `FROM` and `JOIN`
-2. `ON`
-3. `WHERE`
-4. `GROUP BY`
-5. `HAVING`
-6. `SELECT`
-7. `DISTINCT`
-8. `ORDER BY`
-9. `TOP` / `OFFSET ... FETCH` (logical details depend on the query and database)
-
-This explains why a `SELECT` alias usually cannot be referenced in `WHERE` at the same query level, while it can often be used in `ORDER BY`.
-
-Example:
-
-```sql
-SELECT
-    DepartmentID,
-    AVG(Salary) AS AverageSalary
-FROM Employees
-WHERE Salary > 0
-GROUP BY DepartmentID
-HAVING AVG(Salary) > 40000
-ORDER BY AverageSalary DESC;
-```
-
----
-
-## Practice Database Ideas
-
-Use a consistent dataset across multiple topics so you can build on earlier work.
-
-### 1. Employee database
-
-Tables: `Employees`, `Departments`, `Attendance`, `LeaveRequests`, `Salaries`
-
-Practice: joins, tenure, attendance summaries, conditional aggregation, ranking, and HR reporting.
-
-### 2. Sales database
-
-Tables: `Customers`, `Products`, `Orders`, `OrderDetails`, `Payments`
-
-Practice: revenue, top products, customer retention, monthly comparisons, and running totals.
-
-### 3. Inventory database
-
-Tables: `Items`, `Warehouses`, `StockMovements`, `PurchaseOrders`, `GoodsReceipts`
-
-Practice: current stock, stock movement reconciliation, low-stock alerts, and inventory valuation.
-
-### 4. Export invoice reporting database
-
-Tables might include `ExportInvoices`, `Buyers`, `Factories`, `ShippingBills`, `OnBoardRecords`, `BankSubmissions`, and `Realizations`.
-
-Practice: pending-status reports, invoice reconciliation, date-range reporting, duplicate checks, factory-wise summaries, and exception handling.
-
-Use fictional or sanitized data for portfolio projects. Do not upload confidential company records.
-
----
-
-## Real-World Projects
-
-Complete each project with a schema, sample data, SQL scripts, expected outputs, and a short explanation of the business problem.
-
-### Project 1: Sales Performance Dashboard Dataset
-
-- Monthly and yearly revenue
-- Top products and customers
-- Revenue contribution percentage
-- Month-over-month growth
-- Running totals and rolling averages
-- A reusable reporting view
-
-### Project 2: Inventory and Stock Reconciliation
-
-- Opening stock, receipts, issues, and closing stock
-- Identify negative stock and inconsistent movements
-- Compare system stock with physical stock
-- Find duplicate or missing transaction references
-- Add indexes and measure query performance
-
-### Project 3: HR Attendance Analytics
-
-- Employee-wise attendance summary
-- Late arrivals and absence counts
-- Monthly attendance rates
-- Department-level comparison
-- Explainable rule-based attendance categories
-- Data quality checks for missing or conflicting records
-
-### Project 4: Export Invoice Pending Status
-
-- Identify invoices pending at each business stage
-- Filter by factory, buyer, and date range
-- Detect missing shipping-bill or bank-submission information
-- Reconcile invoice totals between reports
-- Build a stored procedure with validated parameters
-- Produce exception reports for duplicate and missing references
-
-### Project 5: SQL Performance Investigation
-
-- Create a large synthetic dataset
-- Record a baseline execution plan and logical reads
-- Add or revise an index
-- Compare actual runtime, reads, and row counts
-- Explain the improvement and any trade-offs
-
----
-
-## Practice Method
-
-For every topic:
-
-1. Read the concept and understand when it is useful.
-2. Type the query yourself instead of only copying it.
-3. Predict the output before executing the query.
-4. Run it against the practice database.
-5. Test edge cases: empty results, duplicates, NULLs, and boundary dates.
-6. Rewrite the query in a different way where appropriate.
-7. Check correctness before considering performance.
-8. Save the exercise in the relevant `.sql` file.
-9. Add comments explaining the business rule.
-10. Commit meaningful changes to Git.
-
-### Suggested weekly routine
-
-| Day | Focus |
-|---|---|
-| Day 1 | Learn the topic and run guided examples |
-| Day 2 | Solve beginner exercises |
-| Day 3 | Solve intermediate problems |
-| Day 4 | Apply the topic to a business dataset |
-| Day 5 | Review mistakes and rewrite queries |
-| Day 6 | Build or improve a mini-project |
-| Day 7 | Revise and document what you learned |
-
-Adjust the pace to your available study time. Consistent practice is more important than rushing through every topic.
-
----
-
-## Progress Tracker
-
-Mark each topic as complete only when you can solve several problems independently.
-
-### Beginner
-
-- [ ] `SELECT`, aliases, `DISTINCT`, `TOP`
-- [ ] `WHERE`, operators, `IN`, `BETWEEN`, `LIKE`
-- [ ] NULL handling
-- [ ] `ORDER BY`
-- [ ] String, numeric, date, and conversion functions
-- [ ] `CASE`
-- [ ] `CREATE`, `ALTER`, `DROP`
-- [ ] `INSERT`, `UPDATE`, `DELETE`
-- [ ] Keys and constraints
-- [ ] Basic joins
-- [ ] `GROUP BY`, aggregate functions, `HAVING`
-
-### Intermediate
-
-- [ ] All major join types
-- [ ] Set operators
-- [ ] Subqueries and correlated subqueries
-- [ ] `EXISTS` and `NOT EXISTS`
-- [ ] CTEs and derived tables
-- [ ] Duplicate detection and data cleaning
-- [ ] Conditional aggregation
-- [ ] Latest row per group
-- [ ] Pagination
-- [ ] Views
-- [ ] Basic stored procedures and parameters
-- [ ] Transaction fundamentals
-
-### Advanced
-
-- [ ] Window functions and window frames
-- [ ] Recursive CTEs
-- [ ] Advanced grouping and pivoting
-- [ ] Functions, triggers, and error handling
-- [ ] Dynamic SQL and parameterization
-- [ ] ACID, isolation levels, locking, and deadlocks
-- [ ] Normalization and dimensional modeling
-- [ ] Index design
-- [ ] Execution-plan analysis
-- [ ] Query tuning and measurement
-- [ ] Permissions and SQL injection prevention
-- [ ] Completed at least two real-world projects
-
----
-
-## Common SQL Mistakes
-
-1. **Using `= NULL`**  
-   Use `IS NULL` or `IS NOT NULL`.
-
-2. **Forgetting the `WHERE` clause in a modification**  
-   Preview the affected rows before running an `UPDATE` or `DELETE`.
-
-3. **Using `NOT IN` with a set containing NULL**  
-   The result can be surprising. Consider `NOT EXISTS` where appropriate.
-
-4. **Using `SELECT *` in production reports**  
-   Select only the columns needed to improve clarity and reduce unnecessary data transfer.
-
-5. **Joining on the wrong key**  
-   Confirm table relationships and compare row counts before and after joins.
-
-6. **Ignoring one-to-many relationships**  
-   A join can legitimately produce multiple rows for one parent record.
-
-7. **Filtering a date with an imprecise end boundary**  
-   Prefer half-open ranges: `>= start_date AND < next_period_start`.
-
-8. **Assuming a CTE is automatically materialized**  
-   A CTE is a query expression; it is not automatically stored as a temporary result.
-
-9. **Creating indexes without measurement**  
-   Examine the execution plan and workload before adding indexes.
-
-10. **Concatenating user input into SQL**  
-    Use parameters to reduce SQL injection risk.
-
-11. **Using a cursor when a set-based solution is possible**  
-    Prefer set-based operations when they express the requirement clearly and correctly.
-
-12. **Confusing `DELETE`, `TRUNCATE`, and `DROP`**  
-    They have different effects, permissions, logging behavior, and rollback considerations.
-
----
-
-## Recommended Learning Resources
-
-- [Microsoft Learn: Transact-SQL reference](https://learn.microsoft.com/en-us/sql/t-sql/language-reference)
-- [Microsoft Learn: SQL Server documentation](https://learn.microsoft.com/en-us/sql/sql-server/)
-- [Microsoft Learn: Query processing architecture guide](https://learn.microsoft.com/en-us/sql/relational-databases/query-processing-architecture-guide)
-- [Microsoft Learn: Index architecture and design guide](https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-index-design-guide)
-- [SQLBolt: Interactive SQL lessons](https://sqlbolt.com/)
-- [SQLZoo: Interactive SQL tutorials](https://sqlzoo.net/wiki/SQL_Tutorial)
-- [Use The Index, Luke: SQL indexing and tuning](https://use-the-index-luke.com/)
-- [AdventureWorks sample databases](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure)
-
-**Tip:** Follow the SQL Server documentation for T-SQL-specific features and use interactive tutorials for additional repetition. Syntax and feature support differ across database engines.
-
----
-
-## Contribution Guidelines
-
-Contributions are welcome.
-
-1. Create a branch for your changes.
-2. Use descriptive file names and consistent formatting.
-3. Include sample tables and data when needed.
-4. Add comments to explain non-obvious logic.
-5. Include expected output or validation steps for exercises.
-6. Test scripts against the stated database engine.
-7. Never commit credentials, confidential information, or production data.
-8. Submit a pull request with a clear description of the change.
-
----
-
-## License
-
-Choose a license before publishing this repository publicly. If you intend to share and reuse the material openly, consider adding an appropriate open-source license file.
-
----
-
-## Final Goal
+# 1. Learning Outcomes
 
 By the end of this roadmap, you should be able to:
 
-- Write SQL confidently from basic retrieval to advanced analytics.
-- Design relational tables and maintain data integrity.
-- Build reusable reporting queries and stored procedures.
-- Debug incorrect results and reconcile datasets.
-- Analyze execution plans and improve query performance.
-- Develop a portfolio of practical SQL projects.
+- Retrieve, filter, sort, and transform data with T-SQL.
+- Clean and validate imperfect business data.
+- Combine multiple tables using joins and set operators.
+- Build accurate summaries, KPIs, and management reports.
+- Analyze trends, rankings, running totals, and period-over-period changes.
+- Use CTEs and subqueries to structure complex queries.
+- Understand database tables, keys, relationships, and normalization.
+- Read and write views and stored procedures.
+- Understand transactions, permissions, indexes, and basic performance tuning.
+- Connect SQL Server data to Excel, Power BI, and Python.
+- Explain the business meaning and validation logic behind your results.
+- Present a portfolio of practical SQL projects.
 
-**Learn the concept → write the query → test the result → handle edge cases → optimize → document.**
+> **Priority for Data Analyst roles:** querying, filtering, data cleaning, joins, aggregation, CTEs, window functions, dates, business KPIs, and query validation. Learn advanced database administration after these are strong.
+
+---
+
+# 2. Recommended Tools and Practice Data
+
+## Tools
+- **SQL Server Developer or Express:** local SQL database engine.
+- **SQL Server Management Studio (SSMS):** write and run T-SQL.
+- **Git and GitHub/GitLab:** version control for your practice repository.
+- **Excel:** validate outputs and compare results.
+- **Power BI:** model and visualize analyzed data.
+- **Python with pandas:** optional but valuable for validation and automation.
+
+## Practice databases
+- Microsoft AdventureWorks sample database.
+- Microsoft Wide World Importers sample database.
+- Your own practice database containing customers, products, orders, order details, employees, departments, and inventory.
+
+Use synthetic or approved training data. Do not commit confidential company data, credentials, server names, or personal information to a public repository.
+
+---
+
+# 3. Repository and Folder Structure
+
+Create a root folder such as `SQL_Data_Analyst_Roadmap`. Open Command Prompt in that folder and run:
+
+```bat
+mkdir 00_Setup
+mkdir 01_SQL_Fundamentals
+mkdir 02_Filtering_and_Sorting
+mkdir 03_SQL_Functions
+mkdir 04_Data_Manipulation
+mkdir 05_Constraints_and_Keys
+mkdir 06_Joins_and_Set_Operators
+mkdir 07_Aggregation_and_Grouping
+mkdir 08_Subqueries_and_CTEs
+mkdir 09_Intermediate_Query_Patterns
+mkdir 10_Window_Functions
+mkdir 11_Data_Cleaning_and_Validation
+mkdir 12_Business_Data_Analysis
+mkdir 13_Date_and_Time_Analysis
+mkdir 14_Views_and_Stored_Procedures
+mkdir 15_SQL_Functions_and_Triggers
+mkdir 16_Transactions_and_Error_Handling
+mkdir 17_Database_Design_and_Modeling
+mkdir 18_Indexing_and_Performance_Tuning
+mkdir 19_SQL_Security_and_Best_Practices
+mkdir 20_Advanced_SQL
+mkdir 21_SQL_Interview_Questions
+mkdir 22_Real_World_Projects
+mkdir 23_Practice_Exercises
+mkdir 24_Reference_and_Cheatsheets
+```
+
+Suggested files for each folder:
+
+```text
+SQL_Data_Analyst_Roadmap/
+├── README.md
+├── 00_Setup/
+│   ├── 01_Install_and_Connect.md
+│   ├── 02_Create_Practice_Database.sql
+│   └── 03_SQL_Server_Notes.md
+├── 01_SQL_Fundamentals/
+│   ├── 01_SELECT.sql
+│   ├── 02_DISTINCT.sql
+│   ├── 03_Column_Aliases.sql
+│   ├── 04_TOP.sql
+│   ├── 05_Data_Types.sql
+│   └── README.md
+├── 02_Filtering_and_Sorting/
+│   ├── 01_WHERE.sql
+│   ├── 02_AND_OR_NOT.sql
+│   ├── 03_IN_BETWEEN_LIKE.sql
+│   ├── 04_NULL_Handling.sql
+│   └── 05_ORDER_BY.sql
+├── 03_SQL_Functions/
+│   ├── 01_String_Functions.sql
+│   ├── 02_Numeric_Functions.sql
+│   ├── 03_Date_Functions.sql
+│   ├── 04_CONVERT_CAST.sql
+│   └── 05_CASE_COALESCE.sql
+├── 04_Data_Manipulation/
+│   ├── 01_INSERT.sql
+│   ├── 02_UPDATE.sql
+│   ├── 03_DELETE.sql
+│   └── 04_MERGE_Concepts.sql
+├── 05_Constraints_and_Keys/
+├── 06_Joins_and_Set_Operators/
+├── 07_Aggregation_and_Grouping/
+├── 08_Subqueries_and_CTEs/
+├── 09_Intermediate_Query_Patterns/
+├── 10_Window_Functions/
+├── 11_Data_Cleaning_and_Validation/
+├── 12_Business_Data_Analysis/
+├── 13_Date_and_Time_Analysis/
+├── 14_Views_and_Stored_Procedures/
+├── 15_SQL_Functions_and_Triggers/
+├── 16_Transactions_and_Error_Handling/
+├── 17_Database_Design_and_Modeling/
+├── 18_Indexing_and_Performance_Tuning/
+├── 19_SQL_Security_and_Best_Practices/
+├── 20_Advanced_SQL/
+├── 21_SQL_Interview_Questions/
+├── 22_Real_World_Projects/
+├── 23_Practice_Exercises/
+└── 24_Reference_and_Cheatsheets/
+```
+
+Add numbered `.sql` files and a short `README.md` to each phase as you progress. The structure is a guide; you do not need to create every file on day one.
+
+---
+
+# 4. Phase-by-Phase Topic Roadmap
+
+## Phase 00 — Setup and SQL Environment
+
+- [ ] Understand database, schema, table, row, column, query, and result set.
+- [ ] Install or access SQL Server and SSMS.
+- [ ] Connect to a SQL Server instance.
+- [ ] Understand server, database, and schema names.
+- [ ] Create a practice database and inspect sample tables.
+- [ ] Run a basic `SELECT` query.
+- [ ] Save scripts as `.sql` files.
+- [ ] Learn how to execute a selected query and read error messages.
+- [ ] Learn the difference between development, test, and production environments.
+- [ ] Understand why production data should not be modified casually.
+
+**Practice deliverable:** a script that creates a practice database and basic tables.
+
+## Phase 01 — SQL Fundamentals
+
+- [ ] `SELECT`
+- [ ] `SELECT *` and why explicitly naming columns is often better
+- [ ] Selecting expressions and constants
+- [ ] Column aliases with `AS`
+- [ ] `DISTINCT`
+- [ ] `TOP` and `TOP ... PERCENT`
+- [ ] `ORDER BY`, ascending and descending
+- [ ] Basic arithmetic expressions
+- [ ] SQL comments (`--` and `/* ... */`)
+- [ ] SQL statement structure and readability
+- [ ] Basic data types: `INT`, `BIGINT`, `DECIMAL`, `VARCHAR`, `NVARCHAR`, `DATE`, `DATETIME2`, `BIT`
+- [ ] Understanding precision and scale for numeric values
+- [ ] Schema-qualified names such as `dbo.Customers`
+
+**Practice:** select specific columns, create aliases, return unique values, and show the top 10 records.
+
+## Phase 02 — Filtering and Sorting
+
+- [ ] `WHERE`
+- [ ] Comparison operators: `=`, `<>`, `!=`, `>`, `<`, `>=`, `<=`
+- [ ] `AND`, `OR`, `NOT`
+- [ ] Operator precedence and parentheses
+- [ ] `IN` and `NOT IN`
+- [ ] `BETWEEN` and inclusive boundaries
+- [ ] `LIKE`, `%`, `_`, and wildcard matching
+- [ ] `IS NULL` and `IS NOT NULL`
+- [ ] Combining multiple conditions
+- [ ] Filtering dates with inclusive/exclusive ranges
+- [ ] Sorting by one or multiple columns
+- [ ] Stable sorting and tie-breakers
+- [ ] `OFFSET ... FETCH` for paging
+
+**Practice:** find orders within a date range, pending invoices, records for selected buyers, and products above a threshold.
+
+## Phase 03 — SQL Functions and Expressions
+
+### String functions
+- [ ] `CONCAT`, `CONCAT_WS`
+- [ ] `LEN`, `DATALENGTH`
+- [ ] `LEFT`, `RIGHT`, `SUBSTRING`
+- [ ] `CHARINDEX`, `PATINDEX`
+- [ ] `REPLACE`, `TRANSLATE`
+- [ ] `UPPER`, `LOWER`
+- [ ] `LTRIM`, `RTRIM`, `TRIM`
+- [ ] `STRING_SPLIT`, `STRING_AGG`
+- [ ] Unicode text and `NVARCHAR`
+
+### Numeric and conversion functions
+- [ ] `ROUND`, `CEILING`, `FLOOR`, `ABS`
+- [ ] `CAST`, `CONVERT`, `TRY_CAST`, `TRY_CONVERT`
+- [ ] `ISNULL`, `COALESCE`, `NULLIF`
+- [ ] `CASE WHEN`
+- [ ] `CHOOSE`, `IIF` (recognize them; prefer clear `CASE` where appropriate)
+
+### Date and time functions
+- [ ] `GETDATE`, `SYSDATETIME`, `CURRENT_TIMESTAMP`
+- [ ] `DATEADD`, `DATEDIFF`, `DATEDIFF_BIG`
+- [ ] `DATEPART`, `DATENAME`
+- [ ] `YEAR`, `MONTH`, `DAY`
+- [ ] `EOMONTH`, `DATEFROMPARTS`, `DATETIME2FROMPARTS`
+- [ ] `AT TIME ZONE` basics
+- [ ] Understand implicit conversion and date-format ambiguity
+
+**Practice:** standardize text, extract a code from a hyphen-separated reference, calculate durations, and classify records with `CASE`.
+
+## Phase 04 — Data Manipulation (DML)
+
+- [ ] `INSERT INTO ... VALUES`
+- [ ] `INSERT INTO ... SELECT`
+- [ ] `UPDATE ... SET`
+- [ ] `DELETE`
+- [ ] `OUTPUT` clause for reviewing changed rows
+- [ ] `TRUNCATE TABLE` and how it differs from `DELETE`
+- [ ] `MERGE` concepts and risks; understand alternatives for safe upsert logic
+- [ ] `IDENTITY` columns
+- [ ] Default values
+- [ ] Safe `UPDATE` and `DELETE` practices
+- [ ] Preview affected rows with a `SELECT` first
+- [ ] Use transactions where appropriate
+- [ ] Verify row counts and results after changes
+
+**Safety rule:** never run an `UPDATE` or `DELETE` in a real database until you have verified the target rows, predicate, permissions, backup/recovery expectations, and transaction plan.
+
+## Phase 05 — Constraints, Keys, and Data Integrity
+
+- [ ] Primary keys
+- [ ] Foreign keys
+- [ ] Unique constraints
+- [ ] `NOT NULL`
+- [ ] `CHECK` constraints
+- [ ] `DEFAULT` constraints
+- [ ] Composite keys
+- [ ] Natural keys versus surrogate keys
+- [ ] Referential integrity
+- [ ] Duplicate detection
+- [ ] Orphan-row detection
+- [ ] Data type and length validation
+
+**Practice:** design customer, product, order, and order-detail tables with valid keys and constraints.
+
+## Phase 06 — Joins and Set Operators
+
+- [ ] `INNER JOIN`
+- [ ] `LEFT JOIN`
+- [ ] `RIGHT JOIN` and why `LEFT JOIN` is often easier to read
+- [ ] `FULL OUTER JOIN`
+- [ ] `CROSS JOIN`
+- [ ] Self joins
+- [ ] Joining three or more tables
+- [ ] Composite join conditions
+- [ ] Join cardinality and one-to-many relationships
+- [ ] Duplicate row multiplication caused by joins
+- [ ] `UNION` versus `UNION ALL`
+- [ ] `EXCEPT`
+- [ ] `INTERSECT`
+- [ ] Anti-joins with `NOT EXISTS` or `LEFT JOIN ... IS NULL`
+- [ ] Semi-joins with `EXISTS`
+- [ ] Join columns with mismatched data types
+- [ ] Choosing the correct join key
+
+**Practice:** combine orders, customers, products, factories, buyers, and invoices. Validate row counts before and after each join.
+
+## Phase 07 — Aggregation and Grouping
+
+- [ ] `COUNT(*)` versus `COUNT(column)`
+- [ ] `COUNT(DISTINCT column)`
+- [ ] `SUM`, `AVG`, `MIN`, `MAX`
+- [ ] `GROUP BY`
+- [ ] `HAVING`
+- [ ] Conditional aggregation with `SUM(CASE WHEN ... THEN ... END)`
+- [ ] Multiple grouping columns
+- [ ] Aggregating after joins without double counting
+- [ ] Handling `NULL` in aggregates
+- [ ] Percentages and ratios with safe division using `NULLIF`
+- [ ] Rounding and numeric precision
+- [ ] Grouping sets, `ROLLUP`, and `CUBE` (introductory)
+- [ ] `GROUPING` and `GROUPING_ID` (introductory)
+
+**Practice:** sales by buyer/month, invoice count by status, stock by item/factory, and pending versus completed totals.
+
+## Phase 08 — Subqueries and Common Table Expressions
+
+- [ ] Scalar subqueries
+- [ ] Multi-row subqueries
+- [ ] Correlated subqueries
+- [ ] `EXISTS` and `NOT EXISTS`
+- [ ] `IN` and `NOT IN` caveats with `NULL`
+- [ ] Derived tables
+- [ ] Common Table Expressions (`WITH ... AS`)
+- [ ] Multiple CTEs
+- [ ] Recursive CTE concepts
+- [ ] CTE versus temporary table versus derived table
+- [ ] Query decomposition into logical steps
+- [ ] Rewriting a subquery as a join when appropriate
+
+**Practice:** find customers above average sales, latest record per key, missing related rows, and invoices with no matching shipment record.
+
+## Phase 09 — Intermediate Query Patterns
+
+- [ ] `CASE`-based status classification
+- [ ] Conditional counts and sums
+- [ ] De-duplication with `ROW_NUMBER`
+- [ ] Selecting latest/earliest record per entity
+- [ ] Finding missing sequence values
+- [ ] Comparing two data extracts
+- [ ] Finding unmatched records between systems
+- [ ] Pivoting rows into columns with conditional aggregation
+- [ ] `PIVOT` and `UNPIVOT` basics
+- [ ] `APPLY`, `CROSS APPLY`, and `OUTER APPLY`
+- [ ] Dynamic search conditions
+- [ ] Safe optional-parameter filtering
+- [ ] Pagination
+- [ ] Handling many-to-many relationships
+- [ ] Avoiding accidental many-to-many joins
+
+**Practice:** compare ERP and MIS totals, identify records present in one source but not another, and assign a clear pending/completed status.
+
+## Phase 10 — Window Functions
+
+- [ ] `OVER()`
+- [ ] `PARTITION BY`
+- [ ] `ORDER BY` inside `OVER`
+- [ ] Window frames: `ROWS` and `RANGE`
+- [ ] `ROW_NUMBER`
+- [ ] `RANK` and `DENSE_RANK`
+- [ ] `NTILE`
+- [ ] `LAG` and `LEAD`
+- [ ] `FIRST_VALUE` and `LAST_VALUE`
+- [ ] Running totals
+- [ ] Moving averages
+- [ ] Percent-of-total calculations
+- [ ] Period-over-period change
+- [ ] Ranking within each buyer/factory/category
+- [ ] Deduplication using window functions
+- [ ] Difference between grouped aggregates and window aggregates
+
+**Practice:** top buyers per month, latest invoice per custom code, running monthly totals, and month-over-month growth.
+
+## Phase 11 — Data Cleaning and Validation
+
+- [ ] Detect `NULL`, empty strings, and whitespace-only strings
+- [ ] Remove leading/trailing spaces with `TRIM`
+- [ ] Detect hidden/control characters
+- [ ] Standardize case and spelling
+- [ ] Parse dates safely with `TRY_CONVERT`
+- [ ] Detect invalid numeric values
+- [ ] Identify duplicate business keys
+- [ ] Validate required columns
+- [ ] Check allowed values and reference tables
+- [ ] Detect impossible or suspicious dates
+- [ ] Detect negative or unusually large quantities
+- [ ] Validate totals and cross-table relationships
+- [ ] Compare source and target row counts
+- [ ] Build exception reports rather than silently dropping bad rows
+- [ ] Document transformation rules
+- [ ] Make cleaning operations repeatable and auditable
+
+**Practice:** create a data-quality report with counts for missing values, duplicates, invalid dates, invalid codes, and unmatched records.
+
+## Phase 12 — Business Data Analysis and KPI Reporting
+
+- [ ] Define a business question before writing SQL
+- [ ] Translate KPI definitions into precise SQL logic
+- [ ] Sales, quantity, order, and invoice metrics
+- [ ] Pending versus completed status analysis
+- [ ] Buyer, supplier, product, factory, and department analysis
+- [ ] Top-N and bottom-N analysis
+- [ ] Contribution percentage
+- [ ] Average order value and average quantity
+- [ ] Conversion and completion rates
+- [ ] Backlog and aging analysis
+- [ ] Target versus actual analysis
+- [ ] Exception and outlier analysis
+- [ ] Reconciliation between two reports/systems
+- [ ] Snapshot versus transaction data
+- [ ] Avoiding double counting
+- [ ] Define the grain of every report
+- [ ] Add totals and subtotals when needed
+- [ ] Explain metric definitions and exclusions
+
+**Practice:** create a management summary showing totals, status breakdown, top contributors, exceptions, and period comparison.
+
+## Phase 13 — Date and Time Analysis
+
+- [ ] Date literals and unambiguous formats
+- [ ] Filter dates with half-open ranges: `>= start` and `< next period`
+- [ ] Day, week, month, quarter, and year analysis
+- [ ] Month-to-date (MTD)
+- [ ] Quarter-to-date (QTD)
+- [ ] Year-to-date (YTD)
+- [ ] Previous day/week/month
+- [ ] Rolling 7-day, 30-day, and 12-month metrics
+- [ ] Business days and weekends
+- [ ] Fiscal years and fiscal periods
+- [ ] Calendar/date dimension
+- [ ] Month-over-month and year-over-year comparison
+- [ ] Aging buckets
+- [ ] Time zone basics
+- [ ] Date boundaries and daylight-saving concepts where relevant
+- [ ] Avoid wrapping indexed date columns in functions in `WHERE` when a range predicate will work
+
+**Practice:** daily ex-factory summary, yesterday versus month-to-date, and invoice aging by status.
+
+## Phase 14 — Views and Stored Procedures
+
+- [ ] What a view is
+- [ ] Create and alter views
+- [ ] Schema binding concepts
+- [ ] View limitations and ordering
+- [ ] What a stored procedure is
+- [ ] `CREATE PROCEDURE` / `ALTER PROCEDURE`
+- [ ] Input parameters
+- [ ] Output parameters and return codes
+- [ ] Default parameter values
+- [ ] Parameter data types and validation
+- [ ] `SET NOCOUNT ON`
+- [ ] `TRY...CATCH` basics
+- [ ] `THROW`
+- [ ] Parameterized execution
+- [ ] Read and understand existing procedures
+- [ ] Inspect procedure definitions and dependencies
+- [ ] Safely test procedures in a non-production environment
+- [ ] Understand permissions and ownership chaining
+- [ ] Understand how reporting tools call procedures
+
+**Practice:** create a parameterized monthly sales report procedure and a reusable view for cleaned invoice data.
+
+## Phase 15 — User-Defined Functions and Triggers
+
+- [ ] Scalar functions
+- [ ] Inline table-valued functions
+- [ ] Multi-statement table-valued functions (know trade-offs)
+- [ ] Function limitations and performance implications
+- [ ] What triggers are
+- [ ] `AFTER` and `INSTEAD OF` triggers
+- [ ] `inserted` and `deleted` pseudo-tables
+- [ ] Multi-row-safe trigger logic
+- [ ] Auditing use cases
+- [ ] Why triggers can make systems harder to debug
+- [ ] Alternatives such as explicit application logic or audit tables
+
+**Priority:** learn what these objects do and how to read them. For a Data Analyst, creating complex triggers is usually lower priority than query analysis and reporting.
+
+## Phase 16 — Transactions and Error Handling
+
+- [ ] ACID properties
+- [ ] `BEGIN TRANSACTION`
+- [ ] `COMMIT`
+- [ ] `ROLLBACK`
+- [ ] `TRY...CATCH`
+- [ ] `XACT_STATE()`
+- [ ] `@@TRANCOUNT`
+- [ ] `SET XACT_ABORT ON`
+- [ ] Savepoints
+- [ ] Isolation levels
+- [ ] Dirty reads, non-repeatable reads, phantom reads
+- [ ] Blocking and deadlocks
+- [ ] Locking basics
+- [ ] Idempotent scripts
+- [ ] Safe retry concepts
+- [ ] Transaction scope and duration
+
+**Practice:** test an update in a transaction, inspect the result, then roll it back. Never experiment with transaction scripts against production data.
+
+## Phase 17 — Database Design and Modeling
+
+- [ ] Entities, attributes, and relationships
+- [ ] ER diagrams
+- [ ] One-to-one, one-to-many, many-to-many
+- [ ] Primary and foreign keys
+- [ ] Composite keys
+- [ ] Normalization: 1NF, 2NF, 3NF
+- [ ] Functional dependencies (introductory)
+- [ ] Surrogate versus natural keys
+- [ ] Fact and dimension tables
+- [ ] Star schema
+- [ ] Snowflake schema
+- [ ] Transactional systems versus analytical systems
+- [ ] Grain of fact tables
+- [ ] Slowly changing dimensions (introductory)
+- [ ] Date dimension
+- [ ] Data dictionary and schema documentation
+
+**Practice:** design a small sales star schema suitable for Power BI.
+
+## Phase 18 — Indexing and Performance Tuning
+
+- [ ] What an index does
+- [ ] Clustered and nonclustered indexes
+- [ ] Composite indexes and column order
+- [ ] Included columns
+- [ ] Unique indexes
+- [ ] Index seek versus scan
+- [ ] Actual execution plan
+- [ ] Estimated versus actual rows
+- [ ] SARGable predicates
+- [ ] Avoid `SELECT *` in production reporting queries
+- [ ] Avoid unnecessary conversions on join/filter columns
+- [ ] Understand statistics
+- [ ] Parameter sniffing (conceptual)
+- [ ] Query Store (introductory)
+- [ ] Common causes of slow queries
+- [ ] Measure before and after changes
+- [ ] Index maintenance concepts
+- [ ] Why indexes can slow down data modifications
+- [ ] Avoid adding indexes without evidence
+
+**Practice:** inspect the execution plan of a slow query, identify the likely bottleneck, and measure the result of one justified change.
+
+## Phase 19 — SQL Security and Professional Practices
+
+- [ ] Principle of least privilege
+- [ ] Login versus database user
+- [ ] Roles and permissions
+- [ ] `GRANT`, `DENY`, and `REVOKE`
+- [ ] Avoid embedding passwords in scripts
+- [ ] Use parameterized queries in applications
+- [ ] SQL injection concepts and prevention
+- [ ] Separate development, test, and production access
+- [ ] Avoid exposing personal or confidential data
+- [ ] Use transactions and approvals for destructive changes
+- [ ] Naming conventions
+- [ ] Formatting and comments
+- [ ] Script versioning with Git
+- [ ] Code review and change tracking
+- [ ] Document assumptions, business rules, and known limitations
+- [ ] Verify report totals against a trusted reference
+
+## Phase 20 — Advanced SQL Topics (After Core Competence)
+
+- [ ] Recursive CTE use cases
+- [ ] Advanced window frames
+- [ ] Dynamic SQL and `sp_executesql`
+- [ ] Safe dynamic SQL and identifier quoting with `QUOTENAME`
+- [ ] Temporary tables (`#temp`) and table variables
+- [ ] Table-valued parameters (conceptual)
+- [ ] JSON functions in SQL Server
+- [ ] XML basics if required by the source system
+- [ ] `OPENJSON`
+- [ ] `PIVOT` / `UNPIVOT`
+- [ ] `APPLY`
+- [ ] Temporal tables (conceptual)
+- [ ] Change Data Capture (CDC) and Change Tracking (conceptual)
+- [ ] Query Store
+- [ ] Partitioning concepts
+- [ ] Columnstore indexes (analytics workloads)
+- [ ] Import/export and bulk-loading concepts
+- [ ] Linked servers and cross-database queries (with governance)
+- [ ] SQL Agent jobs (read and monitor; administration may require permissions)
+
+**Note:** choose advanced topics based on your job and environment rather than learning every feature without a use case.
+
+## Phase 21 — SQL Interview Preparation
+
+- [ ] Explain `WHERE` versus `HAVING`
+- [ ] Explain `UNION` versus `UNION ALL`
+- [ ] Explain `INNER JOIN` versus `LEFT JOIN`
+- [ ] Explain `COUNT(*)` versus `COUNT(column)`
+- [ ] Explain `ROW_NUMBER`, `RANK`, and `DENSE_RANK`
+- [ ] Explain CTE versus subquery versus temporary table
+- [ ] Find the second-highest salary
+- [ ] Find duplicate records
+- [ ] Find the latest row per customer
+- [ ] Find customers with no orders
+- [ ] Calculate running totals
+- [ ] Calculate month-over-month growth
+- [ ] Find gaps in dates or sequences
+- [ ] Delete duplicates safely (explain before executing)
+- [ ] Explain primary keys and foreign keys
+- [ ] Explain normalization and star schema
+- [ ] Explain clustered versus nonclustered indexes
+- [ ] Read an execution plan at a basic level
+- [ ] Debug a query returning duplicate or missing rows
+- [ ] Explain a project and validate its business logic
+
+---
+
+# 5. Data Analyst Priority Order
+
+Use this order if your main goal is to become employable as a Data Analyst.
+
+## Must master
+1. `SELECT`, `WHERE`, `ORDER BY`, `TOP`
+2. String, numeric, date, and conversion functions
+3. `CASE`, `NULL` handling
+4. `GROUP BY`, aggregates, `HAVING`
+5. `INNER JOIN`, `LEFT JOIN`, multi-table joins
+6. Subqueries, `EXISTS`, CTEs
+7. Window functions
+8. Data cleaning and validation
+9. Date-based reporting and period comparisons
+10. Business KPIs and reconciliation
+11. Views and reading stored procedures
+12. Query correctness and basic performance tuning
+
+## Learn next
+- Writing stored procedures
+- Data modeling and star schemas
+- Transactions and error handling
+- Index design basics
+- Power BI data modeling and DAX
+- Python/pandas for repeatable analysis
+
+## Learn later or as the job requires
+- Complex triggers
+- Deep SQL Server administration
+- Replication, high availability, and disaster recovery
+- Advanced partitioning and specialized indexing
+- Complex dynamic SQL and XML processing
+
+---
+
+# 6. A 12-Week SQL Study Plan
+
+This is a suggested plan, not a deadline. Move forward only when you can solve exercises independently.
+
+| Week | Main topics | Practical output |
+|---|---|---|
+| 1 | Setup, `SELECT`, aliases, `DISTINCT`, `TOP`, data types | 25 basic queries |
+| 2 | `WHERE`, logical operators, `LIKE`, `IN`, `BETWEEN`, sorting | 30 filtering queries |
+| 3 | String, numeric, date, conversion functions, `CASE`, `NULL` | Data-cleaning script |
+| 4 | `GROUP BY`, aggregates, `HAVING`, conditional aggregation | KPI summary report |
+| 5 | Joins, set operators, join cardinality | Multi-table report |
+| 6 | Subqueries, `EXISTS`, CTEs, intermediate patterns | Reconciliation report |
+| 7 | Window functions and ranking | Top-N and running-total analysis |
+| 8 | Data validation, date analysis, MTD/YTD, aging | Data-quality and date report |
+| 9 | Business analysis, KPI definitions, report validation | Business case study |
+| 10 | Views, stored procedures, transactions, error handling | Reusable parameterized report |
+| 11 | Data modeling, indexes, execution plans, security basics | Query review and schema diagram |
+| 12 | Portfolio project, interview practice, documentation | One complete portfolio project |
+
+**Weekly routine:**
+- 20% reading and examples.
+- 60% writing and debugging queries.
+- 20% reviewing, documenting, and explaining results.
+
+---
+
+# 7. Real-World Portfolio Projects
+
+Each project should include a business question, schema/grain notes, SQL scripts, validation checks, example output, and a short explanation of findings. Use public or synthetic data.
+
+## Project 1 — Sales Performance Analysis
+**Questions**
+- What are total sales and quantities by month?
+- Which buyers/products contribute most?
+- What is the month-over-month growth?
+- Which products have declining sales?
+
+**Skills:** joins, aggregation, dates, CTEs, window functions.
+
+## Project 2 — Export Invoice Status and Aging
+**Questions**
+- How many invoices are pending at each stage?
+- Which invoices have been pending longest?
+- What are pending amounts by buyer, factory, and month?
+- Are status totals consistent with the source report?
+
+**Skills:** `CASE`, dates, aging buckets, conditional aggregation, validation, CTEs.
+
+## Project 3 — ERP vs MIS Reconciliation
+**Questions**
+- Which business keys appear in one system but not the other?
+- Which totals differ by buyer, invoice, or date?
+- Are differences caused by duplicates, date logic, missing keys, or join multiplication?
+
+**Skills:** `FULL OUTER JOIN`, `EXCEPT`, aggregation, duplicate detection, data-quality checks.
+
+## Project 4 — Inventory and Stock Analysis
+**Questions**
+- What is current stock by item, factory, and category?
+- Which items are below a reorder threshold?
+- Which items have no movement?
+- Do stock totals reconcile with transaction records?
+
+**Skills:** joins, aggregation, dates, validation, data modeling.
+
+## Project 5 — HR Attendance Analysis
+**Questions**
+- What are attendance and lateness trends by month and department?
+- Which teams have recurring attendance exceptions?
+- How are approved leave and duty assignments treated?
+
+**Skills:** date functions, conditional aggregation, CTEs, window functions. Define policies clearly; do not treat a score as objective without explaining the rules.
+
+## Project 6 — Executive KPI Dataset for Power BI
+Build a documented, reusable SQL dataset for a Power BI dashboard.
+
+**Include**
+- Fact and dimension tables or a clearly documented source grain.
+- Consistent KPI definitions.
+- Date dimension and period logic.
+- A view or stored procedure where appropriate.
+- Reconciliation checks.
+- Refresh and data-quality notes.
+
+**Suggested project folder**
+```text
+22_Real_World_Projects/
+├── 01_Sales_Performance/
+│   ├── README.md
+│   ├── 01_Exploration.sql
+│   ├── 02_Cleaning_and_Validation.sql
+│   ├── 03_Analysis.sql
+│   └── 04_KPI_Report.sql
+├── 02_Export_Invoice_Aging/
+├── 03_ERP_MIS_Reconciliation/
+├── 04_Inventory_Analysis/
+├── 05_HR_Attendance_Analysis/
+└── 06_PowerBI_KPI_Dataset/
+```
+
+---
+
+# 8. Query Quality Checklist
+
+Before submitting or relying on a report, ask:
+
+- [ ] Does the query answer a clearly defined business question?
+- [ ] Is the row grain understood (one row per invoice, order line, buyer/month, etc.)?
+- [ ] Are joins made on the correct keys?
+- [ ] Could any join multiply rows?
+- [ ] Are `NULL`, blank, and invalid values handled intentionally?
+- [ ] Are date boundaries correct?
+- [ ] Are totals and percentages mathematically valid?
+- [ ] Is division by zero handled?
+- [ ] Have duplicates and unmatched records been checked?
+- [ ] Do row counts and totals reconcile with a trusted source?
+- [ ] Are aliases meaningful and formatting readable?
+- [ ] Are filters appropriate for the report?
+- [ ] Is the query performant enough for its expected volume?
+- [ ] Are sensitive fields excluded where not needed?
+- [ ] Are data assumptions and exceptions documented?
+
+---
+
+# 9. Suggested SQL File Template
+
+Use this header in your practice scripts:
+
+```sql
+/*
+Topic:
+Business question:
+Source tables:
+Expected grain:
+Assumptions:
+Validation checks:
+Author: Your Name
+Date:
+*/
+
+-- 1. Explore source data
+-- SELECT TOP (20) ...
+-- FROM dbo.YourTable;
+
+-- 2. Main query
+-- Write the query here.
+
+-- 3. Validation
+-- Compare counts, totals, duplicates, and unmatched rows.
+```
+
+For each topic, include:
+1. A simple example.
+2. A realistic business example.
+3. Three to five exercises.
+4. One edge case or validation query.
+5. A short explanation of what you learned.
+
+---
+
+# 10. Common Mistakes to Avoid
+
+- Learning syntax without practicing business questions.
+- Using `SELECT *` in every report.
+- Joining tables without understanding their grain and cardinality.
+- Assuming a join is correct because the query runs.
+- Ignoring `NULL` values.
+- Using `NOT IN` without considering `NULL` values in the subquery.
+- Using `BETWEEN` carelessly with datetime values that include time.
+- Filtering a date column with a function when a range predicate would be more appropriate.
+- Using `DISTINCT` to hide unexplained duplicate rows.
+- Aggregating after a one-to-many join without checking double counting.
+- Writing destructive `UPDATE` or `DELETE` statements without previewing target rows.
+- Building a dashboard before agreeing on KPI definitions.
+- Optimizing queries without measuring performance.
+- Publishing real company data or secrets in a public repository.
+- Spending too much time on advanced administration before mastering analysis.
+
+---
+
+# 11. Free Official Learning Resources
+
+- Microsoft Learn — SQL Server documentation: https://learn.microsoft.com/en-us/sql/sql-server/
+- Microsoft Learn — T-SQL reference: https://learn.microsoft.com/en-us/sql/t-sql/language-reference
+- Microsoft Learn — SQL training: https://learn.microsoft.com/en-us/training/browse/?products=sql-server
+- Microsoft SQL samples and AdventureWorks: https://learn.microsoft.com/en-us/sql/samples/
+- SQLBolt — interactive SQL lessons: https://sqlbolt.com/
+- HackerRank SQL practice: https://www.hackerrank.com/domains/sql
+- LeetCode SQL problems: https://leetcode.com/problemset/database/
+- Git documentation: https://git-scm.com/doc
+- Power BI learning: https://learn.microsoft.com/en-us/training/powerplatform/power-bi/
+
+Use official documentation to confirm SQL Server-specific syntax and behavior.
+
+---
+
+# 12. Progress Tracker
+
+## Foundations
+- [ ] I can write a `SELECT` query without copying an example.
+- [ ] I can filter and sort data correctly.
+- [ ] I can use common functions and `CASE`.
+- [ ] I can explain how `NULL` affects query results.
+
+## Analysis
+- [ ] I can join multiple tables without unexplained duplication.
+- [ ] I can summarize data with aggregates.
+- [ ] I can use subqueries and CTEs.
+- [ ] I can solve common window-function problems.
+- [ ] I can analyze dates and calculate period comparisons.
+- [ ] I can validate totals, duplicates, and unmatched rows.
+
+## Professional practice
+- [ ] I can explain the grain and KPI definitions of a report.
+- [ ] I can read and modify a view or stored procedure safely in a test environment.
+- [ ] I understand transactions and basic SQL permissions.
+- [ ] I can inspect an execution plan and recognize common performance issues.
+- [ ] I use Git to track my scripts.
+- [ ] I have completed at least three documented projects.
+- [ ] I can explain a project to a hiring manager in business terms.
+
+---
+
+# 13. Definition of Job-Ready SQL
+
+You are approaching job-ready SQL analyst level when you can independently:
+
+1. Receive a business question and clarify the metric, date range, and grain.
+2. Locate the required tables and identify reliable join keys.
+3. Write a readable query using joins, CTEs, aggregates, and window functions as needed.
+4. Handle missing, duplicate, invalid, and unmatched records deliberately.
+5. Validate results against source totals or a trusted report.
+6. Explain assumptions, limitations, and findings in plain language.
+7. Deliver repeatable scripts with documented logic.
+8. Connect the result to Excel, Power BI, or Python where appropriate.
+
+SQL is one part of the Data Analyst toolkit. Pair this roadmap with **Excel, Power BI (Power Query, data modeling, and DAX), business communication, and basic Python/pandas** to build a stronger professional profile.
+
+---
+
+## Final Advice
+
+**Master the core before chasing advanced features.** For most analyst work, reliable joins, correct aggregation, date logic, data validation, and business understanding matter more than knowing every SQL Server feature. Practice consistently, save every useful query, and turn your strongest work into documented projects.
