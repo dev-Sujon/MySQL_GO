@@ -1,0 +1,30 @@
+finding
+Buyer	Supplier	B2B LC No	Date	PI No	Date	Item Name	Value	Merchant
+column 
+
+sql query
+
+
+select c.CompanyName,buyer.UserFullName buyerName,s.UserFullName Supplier,bblcm.BBLCNo,
+
+format(bblcm.ApplyingDate,'dd-MM-yyyy') ApplyingDate,
+
+format(bblcm.OpeningDate,'dd-MM-yyyy') OpeningDate,
+
+d.Description PINo,
+
+format(d.PIDate,'dd-MM-yyyy') PIDate,
+
+b.ArticleDescription, a.ItemQty,a.AmountFC,mer.UserFullName Marchent 
+from YarnPODetail a
+left join YarnPOMaster d on a.PIID=d.PIID and d.PITypeID=224
+left join CmnItemMaster b on a.ItemID=b.ItemID
+left join CmnCompany c on a.CompanyID=c.CompanyID
+left join CmnUserInfo s on d.CustomerID=s.UserID
+left join grmBBLCPIDetail bpid on a.PIID=bpid.SourceReferenceID and bpid.SourceReferenceTypeID='218'
+left join grmBBLCMaster bblcm on bpid.BBLCID=bblcm.BBLCID
+left join grmExportLCMaster lcm on bblcm.ExportLCID=lcm.ExportLCID
+left join CmnUserInfo buyer on lcm.BenificiaryID=buyer.UserID
+left join CmnUserInfo mer on d.MerchandiserID=mer.UserID
+where isnull(a.IsDeleted,0)=0 and d.PITypeID is not null
+and d.PIDate between '2024-01-01' and'2025-03-31'

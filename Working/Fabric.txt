@@ -1,0 +1,9 @@
+select distinct a.CustomCode, a.MRRID
+from GrmFabricMRRMaster a
+left join GrmFabricMRRDetail b on a.MRRID=b.MRRID
+where a.MRRID not in(
+select a.MRRID
+from GrmFabricMRRDetail a
+left join GrmFabricMRRMaster b on a.MRRID=b.MRRID
+where isnull(a.IsDeleted,0)=0)
+--and a. MRRID not in ()
